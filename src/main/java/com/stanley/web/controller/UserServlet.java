@@ -33,6 +33,7 @@ public class UserServlet extends HttpServlet {
 		// 获取所有的用户信息
 		List<User> lstUsers = userService.getAllUser();
 		request.setAttribute("lstUsers", lstUsers);
+		request.setAttribute("message", "Thymeleaf Information");
 		request.getRequestDispatcher("/index.jsp").forward(request, response);
 	}
 

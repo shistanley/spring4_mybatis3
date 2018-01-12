@@ -4,7 +4,8 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>查看单一用户页面</title>
@@ -36,7 +37,7 @@ table, td {
 		</c:forEach>
 		<c:if test="${not empty messages}">
 			<tr>
-				<td colspan=4>${messages}</td>
+				<td colspan=4 th:text="${messages}">看到这个说明没有起作用!</td>
 			</tr>
 		</c:if>
 		<tr>
