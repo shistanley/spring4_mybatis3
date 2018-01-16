@@ -4,8 +4,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml"
-	xmlns:th="http://www.thymeleaf.org">
+<html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <title>Spring4集成MyBatis3</title>
@@ -48,7 +47,8 @@ table, td {
 					<a href="UserServlet">显示所有用户</a>&nbsp;<a href="user/regist">注册</a></td>
 			</tr>
 			<tr>
-				<td th:text="${message}" colspan=4>Red Chair</td>
+				<td colspan=4><a href="hello">Hello World</a>&nbsp;<a
+					href="templates/demo">Thymeleaf Demo</a></td>
 			</tr>
 		</table>
 	</form>

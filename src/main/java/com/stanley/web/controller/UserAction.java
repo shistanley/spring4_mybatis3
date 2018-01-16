@@ -28,6 +28,18 @@ public class UserAction {
 	@Autowired
 	private UserServiceI userService;
 
+	@RequestMapping("/getallusers")
+	public ModelAndView getAllUser() {
+		List<User> users = userService.getAllUser();
+		ModelAndView model = new ModelAndView();
+		if (users.isEmpty()) {
+			model.addObject("messages", "目前无用户，请先添加用户！");
+		}
+		model.addObject("lstUsers", users);
+		model.setViewName("jsp/allusers");
+		return model;
+	}
+
 	@RequestMapping("/getusername")
 	public ModelAndView getUserByUsername(HttpServletRequest request, HttpServletResponse response) {
 		String username = request.getParameter("username");
@@ -37,13 +49,13 @@ public class UserAction {
 			model.addObject("messages", "无此用户");
 		}
 		model.addObject("lstUsers", users);
-		model.setViewName("specificuser");
+		model.setViewName("jsp/specificuser");
 		return model;
 	}
 
 	@RequestMapping("/regist")
 	public ModelAndView regist() {
-		ModelAndView model = new ModelAndView("regist");
+		ModelAndView model = new ModelAndView("jsp/regist");
 		return model;
 	}
 
@@ -58,7 +70,7 @@ public class UserAction {
 		userService.addUser(user);
 		ModelAndView model = new ModelAndView();
 		model.addObject("adduser", user);
-		model.setViewName("success");
+		model.setViewName("jsp/success");
 		return model;
 	}
 }

@@ -29,22 +29,17 @@
 	<!-- HandlerAdapter -->
 	<bean
 		class="org.springframework.web.servlet.mvc.SimpleControllerHandlerAdapter" />
-	<!-- configure the InternalResourceViewResolver -->
-	<!-- <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver"> -->
-	<!-- <property name="viewClass" value="org.springframework.web.servlet.view.JstlView" 
-		/> -->
-	<!-- 前缀 -->
-	<!-- <property name="prefix" value="/WEB-INF/jsp/" /> -->
-	<!-- 后缀 -->
-	<!-- <property name="suffix" value=".jsp" /> -->
-	<!-- </bean> -->
 
 	<!--springMVC+thymeleaf的跳转页面配置 -->
 	<bean id="templateResolver"
 		class="org.thymeleaf.spring4.templateresolver.SpringResourceTemplateResolver">
-		<property name="prefix" value="/WEB-INF/jsp/" />
+		<property name="prefix" value="/WEB-INF/" />
 		<property name="suffix" value=".html" />
 		<property name="templateMode" value="HTML5" />
+		<property name="characterEncoding" value="UTF-8" />
+		<!-- 缓存 -->
+		<property name="cacheable"
+			value="#{ systemProperties['thymeleaf.cacheable'] == 'false' ? false : true }" />
 	</bean>
 
 	<bean id="templateEngine" class="org.thymeleaf.spring4.SpringTemplateEngine">
@@ -53,6 +48,24 @@
 
 	<bean class="org.thymeleaf.spring4.view.ThymeleafViewResolver">
 		<property name="templateEngine" ref="templateEngine" />
+		<property name="viewNames" value="templates/*" />
+		<property name="order" value="0" />
+		<property name="characterEncoding" value="UTF-8" />
+	</bean>
+
+	<!-- configure the InternalResourceViewResolver -->
+	<bean id="JSPViewResolver"
+		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="viewClass"
+			value="org.springframework.web.servlet.view.JstlView" />
+		<!-- 前缀 -->
+		<property name="prefix" value="/WEB-INF/" />
+		<!-- 后缀 -->
+		<property name="suffix" value=".jsp" />
+		<property name="viewNames" value="jsp/*" />
+		<property name="order" value="1" />
+		<property name="cache"
+			value="#{ systemProperties['jsp.cacheable'] == 'false' ? false : true }" />
 	</bean>
 
 	<!-- 处理器 -->
