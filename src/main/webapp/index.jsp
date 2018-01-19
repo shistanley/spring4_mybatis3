@@ -48,7 +48,8 @@ table, td {
 			</tr>
 			<tr>
 				<td colspan=4><a href="hello">Hello World</a>&nbsp;<a
-					href="templates/demo">Thymeleaf Demo</a></td>
+					href="templates/demo">Thymeleaf Demo</a>&nbsp;<a
+					href="hellomessage">I18N</a></td>
 			</tr>
 		</table>
 	</form>
