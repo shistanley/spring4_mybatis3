@@ -16,5 +16,8 @@
 		<spring:message code="welcome" />
 	</h2>
 	Locale: ${pageContext.response.locale }
+	<p>
+		<a href="${pageContext.request.contextPath}/index.jsp">返回</a>
+	</p>
 </body>
 </html>

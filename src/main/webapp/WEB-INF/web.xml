@@ -12,7 +12,7 @@
 	<context-param>
 		<param-name>contextConfigLocation</param-name>
 		<!-- 配置spring-mybatis.xml配置文件的位置，固定写法 -->
-		<param-value>classpath:spring-mybatis.xml</param-value>
+		<param-value>classpath:applicationContext.xml</param-value>
 	</context-param>
 	<listener>
 		<description>Spring listener</description>

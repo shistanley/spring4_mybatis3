@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import com.stanley.service.UserServiceI;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:spring-mybatis.xml" })
+@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public class TestMyBatis {
 
 	private static Logger logger = Logger.getLogger(TestMyBatis.class);

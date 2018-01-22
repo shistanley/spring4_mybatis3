@@ -15,7 +15,7 @@ public class MyBatisTest {
 
 	private UserServiceI userService;
 	public ApplicationContext context = new ClassPathXmlApplicationContext(
-			new String[] { "spring-mybatis.xml" });
+			new String[] { "applicationContext.xml" });
 
 	/**
 	 * 这个before方法在所有的测试方法之前执行，并且只执行一次 所有做Junit单元测试时一些初始化工作可以在这个方法里面进行

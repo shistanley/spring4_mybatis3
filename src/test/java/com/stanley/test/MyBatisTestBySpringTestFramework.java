@@ -14,7 +14,7 @@ import com.stanley.service.UserServiceI;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 // 配置了@ContextConfiguration注解并使用该注解的locations属性指明spring和配置文件之后，
-@ContextConfiguration(locations = { "classpath:spring-mybatis.xml" })
+@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
 public class MyBatisTestBySpringTestFramework {
 
 	// 注入userService
