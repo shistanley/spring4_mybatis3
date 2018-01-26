@@ -51,6 +51,9 @@ table, td {
 					href="templates/demo">Thymeleaf Demo</a>&nbsp;<a
 					href="hellomessage">I18N</a></td>
 			</tr>
+			<tr>
+				<td colspan=4><a href="api/redis">Redis Demo</a></td>
+			</tr>
 		</table>
 	</form>
 </body>
