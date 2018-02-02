@@ -11,7 +11,7 @@ public interface UserServiceI {
 	 * 
 	 * @param user
 	 */
-	void addUser(User user);
+	int addUser(User user);
 
 	/**
 	 * 根据用户id获取用户

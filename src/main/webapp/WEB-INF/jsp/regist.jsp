@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+<!-- srpingmvc 验证需要使用到spring表单标签 -->
+<%@ taglib prefix="springform" uri="http://www.springframework.org/tags/form" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -16,7 +18,7 @@ table, td {
 	src="<c:url value='/js/My97DatePicker/WdatePicker.js' />"></script>
 </head>
 <body>
-	<form action="registuser" method="post">
+	<springform:form action="registuser" method="post" modelAttribute="User">
 		<table>
 			<tr>
 				<td>用户ID</td>
@@ -25,7 +27,10 @@ table, td {
 			</tr>
 			<tr>
 				<td>用户名</td>
-				<td><input type="text" name="user_name" autofocus="autofocus" /></td>
+				<td>
+					<input type="text" name="user_name" autofocus="autofocus" />
+					<springform:errors delimiter="," path="user_name"></springform:errors>
+				</td>
 			</tr>
 			<tr>
 				<td>用户生日</td>
@@ -43,6 +48,6 @@ table, td {
 					href="${pageContext.request.contextPath}/index.jsp">返回</a></td>
 			</tr>
 		</table>
-	</form>
+	</springform:form>
 </body>
 </html>

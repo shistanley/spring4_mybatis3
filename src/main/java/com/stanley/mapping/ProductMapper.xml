@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.stanley.dao.ProductMapper">
+	<resultMap id="BaseResultMap" type="com.stanley.model.Product">
+		<id column="product_id" property="productId" jdbcType="CHAR" />
+		<result column="product_name" property="productName" jdbcType="VARCHAR" />
+		<result column="product_desc" property="productDesc" jdbcType="VARCHAR" />
+	</resultMap>
+	<sql id="Base_Column_List">
+		product_id, product_name, product_desc
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap"
+		parameterType="java.lang.String">
+		select
+		<include refid="Base_Column_List" />
+		from t_product
+		where product_id = #{productId,jdbcType=CHAR}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.String">
+		delete from
+		t_product
+		where product_id = #{productId,jdbcType=CHAR}
+	</delete>
+	<insert id="insert" parameterType="com.stanley.model.Product">
+		insert into t_product
+		(product_id,
+		product_name, product_desc)
+		values
+		(#{productId,jdbcType=CHAR},
+		#{productName,jdbcType=VARCHAR},
+		#{productDesc,jdbcType=VARCHAR})
+	</insert>
+	<update id="updateByPrimaryKey" parameterType="com.stanley.model.Product">
+		update t_product
+		set
+		product_name = #{productName,jdbcType=VARCHAR},
+		product_desc =
+		#{productDesc,jdbcType=VARCHAR}
+		where product_id =
+		#{productId,jdbcType=CHAR}
+	</update>
+
+	<select id="findProductByProductname" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select product_id, product_name, product_desc from t_product
+		where
+		product_name = #{productName,jdbcType=VARCHAR}
+	</select>
+
+	<select id="getAllProduct" resultMap="BaseResultMap">
+		select product_id,
+		product_name,
+		product_desc from t_product
+	</select>
+</mapper>

@@ -54,6 +54,9 @@ table, td {
 			<tr>
 				<td colspan=4><a href="api/redis">Redis Demo</a></td>
 			</tr>
+			<tr>
+				<td colspan=4><a href="goto/prod_reg">产品注册</a></td>
+			</tr>
 		</table>
 	</form>
 </body>

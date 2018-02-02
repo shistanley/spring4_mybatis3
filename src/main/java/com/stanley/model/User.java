@@ -2,10 +2,13 @@ package com.stanley.model;
 
 import java.util.Date;
 
+import javax.validation.constraints.NotEmpty;
+
 public class User {
 	
     private String userId;
 
+    @NotEmpty
     private String userName;
 
     private Date userBirthday;

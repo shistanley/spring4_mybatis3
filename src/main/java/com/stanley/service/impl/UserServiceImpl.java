@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserServiceI {
 	private UserMapper userMapper;// 注入dao
 
 	@Override
-	public void addUser(User user) {
-		userMapper.insert(user);
+	public int addUser(User user) {
+		return userMapper.insert(user);
 	}
 
 	@Override

@@ -8,11 +8,20 @@ import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
+import javax.validation.Validation;
+import javax.validation.Validator;
+import javax.validation.ValidatorFactory;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 //import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
@@ -24,6 +33,7 @@ import com.stanley.service.UserServiceI;
 @RequestMapping("/user")
 public class UserAction {
 
+	private final static Logger logger = LoggerFactory.getLogger(UserAction.class);
 	// 注入userService
 	@Autowired
 	private UserServiceI userService;
@@ -43,6 +53,7 @@ public class UserAction {
 	@RequestMapping("/getusername")
 	public ModelAndView getUserByUsername(HttpServletRequest request, HttpServletResponse response) {
 		String username = request.getParameter("username");
+		logger.info(String.format("按用户名查询：", username));
 		List<User> users = userService.getUserByUsername(username);
 		ModelAndView model = new ModelAndView();
 		if (users.isEmpty()) {
@@ -60,17 +71,33 @@ public class UserAction {
 	}
 
 	@RequestMapping("/registuser")
-	public ModelAndView registUser(String user_name, String user_birthday, String user_salary) throws ParseException {
+	public ModelAndView registUser(@ModelAttribute("user") @Valid User u, BindingResult br, String user_name,
+			String user_birthday, String user_salary) throws ParseException {
+		ModelAndView model = new ModelAndView();
+		if (br.hasErrors()) {
+			// 验证未通过则
+			//model.setViewName("validate1");
+			return model;
+		}
 		User user = new User();
 		user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
 		user.setUserName(user_name);
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		user.setUserBirthday(df.parse(user_birthday));
 		user.setUserSalary(Double.valueOf(user_salary));
-		userService.addUser(user);
-		ModelAndView model = new ModelAndView();
-		model.addObject("adduser", user);
-		model.setViewName("jsp/success");
+		
+		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		Validator validator = factory.getValidator();
+		validator.validate(user);
+		int sign = userService.addUser(user);
+		
+		if (sign == 1) {
+			model.addObject("adduser", user);
+			model.setViewName("jsp/success");
+		} else {
+			model.addObject("addfail", "添加用户失败！");
+			model.setViewName("jsp/fail");
+		}
 		return model;
 	}
 }

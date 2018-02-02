@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -19,8 +19,8 @@
 			</tr>
 			<tr>
 				<td colspan="2"><input type="submit" value="submit" />&nbsp; <input
-					type="reset" value="reset" />&nbsp; <a th:href="@{/index.jsp}">返回</a>
-				</td>
+					type="reset" value="reset" />&nbsp; <a
+					href="${pageContext.request.contextPath}/index.jsp">返回</a></td>
 			</tr>
 		</table>
 	</form>

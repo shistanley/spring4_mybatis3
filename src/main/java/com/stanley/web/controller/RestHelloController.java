@@ -63,6 +63,7 @@ public class RestHelloController {
 		String message = helloService.showMessage(tokenService.getName(token));
 		ModelAndView model = new ModelAndView();
 		model.addObject("message", message);
+		model.addObject("success", "保存成功！");
 		model.setViewName("jsp/showRedisData");
 		return model;
 	}

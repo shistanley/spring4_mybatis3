@@ -15,6 +15,16 @@
 		<!-- 配置spring-mybatis.xml配置文件的位置，固定写法 -->
 		<param-value>classpath:applicationContext.xml</param-value>
 	</context-param>
+	<!-- log4j配置文件位置 -->
+	<context-param>
+		<param-name>log4jConfigLocation</param-name>
+		<param-value>classpath:log4j.properties</param-value>
+	</context-param>
+
+	<!-- 利用spring来使用log4j -->
+	<listener>
+		<listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+	</listener>
 	<listener>
 		<description>Spring listener</description>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
