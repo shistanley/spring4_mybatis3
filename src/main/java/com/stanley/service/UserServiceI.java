@@ -12,6 +12,20 @@ public interface UserServiceI {
 	 * @param user
 	 */
 	int addUser(User user);
+	
+	/**
+	 * 刪除用户
+	 * 
+	 * @param userId
+	 */
+	int deleteUser(String userId);
+	
+	/**
+	 * 修改用户
+	 * 
+	 * @param user
+	 */
+	int updateUser(User user);
 
 	/**
 	 * 根据用户id获取用户
@@ -34,5 +48,5 @@ public interface UserServiceI {
 	 * 
 	 * @return List<User>
 	 */
-	List<User> getAllUser();
+	List<User> getAllUser();	
 }

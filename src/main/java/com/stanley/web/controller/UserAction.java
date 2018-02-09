@@ -2,7 +2,6 @@ package com.stanley.web.controller;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-//import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -22,12 +21,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.stanley.model.User;
 import com.stanley.service.UserServiceI;
+import com.stanley.support.Util;
 
 @Controller
 @RequestMapping("/user")
@@ -76,7 +79,7 @@ public class UserAction {
 		ModelAndView model = new ModelAndView();
 		if (br.hasErrors()) {
 			// 验证未通过则
-			//model.setViewName("validate1");
+			// model.setViewName("validate1");
 			return model;
 		}
 		User user = new User();
@@ -85,18 +88,89 @@ public class UserAction {
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		user.setUserBirthday(df.parse(user_birthday));
 		user.setUserSalary(Double.valueOf(user_salary));
-		
+
 		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 		Validator validator = factory.getValidator();
 		validator.validate(user);
 		int sign = userService.addUser(user);
-		
+
 		if (sign == 1) {
 			model.addObject("adduser", user);
 			model.setViewName("jsp/success");
 		} else {
 			model.addObject("addfail", "添加用户失败！");
 			model.setViewName("jsp/fail");
+		}
+		return model;
+	}
+
+	@RequestMapping(value = "/adduser", method = RequestMethod.POST)
+	public ModelAndView addUser(@RequestParam("user_name") String user_name,
+			@RequestParam("user_birthday") String user_birthday, @RequestParam("user_salary") String user_salary)
+			throws ParseException {
+		User user = new User();
+		user.setUserId(Util.getInstance().getRandomID());
+		user.setUserName(user_name);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		user.setUserBirthday(df.parse(user_birthday));
+		user.setUserSalary(Double.valueOf(user_salary));
+		ModelAndView model = new ModelAndView();
+		int sign = userService.addUser(user);
+		if (sign == 1) {
+			List<User> users = userService.getAllUser();
+			model.addObject("users", users);
+			model.setViewName("jsp/user");
+		} else {
+			model.addObject("add_user_fail", "新增用户失败！");
+			model.setViewName("jsp/user");
+		}
+		return model;
+	}
+
+	@RequestMapping(value = "/updateuser/{userId}", method = RequestMethod.GET)
+	public ModelAndView updateUser(@PathVariable("userId") String userId) {
+		ModelAndView model = new ModelAndView();
+		User user = userService.getUserById(userId);
+		model.addObject("user", user);
+		model.setViewName("jsp/updateuser");
+		return model;
+	}
+
+	@RequestMapping(value = "/updateusersubmit", method = RequestMethod.POST)
+	public ModelAndView updateProductSubmit(@RequestParam(value = "user_id_hidden", required = true) String user_id,
+			@RequestParam("user_name") String user_name, @RequestParam("user_birthday") String user_birthday,
+			@RequestParam("user_salary") String user_salary) throws ParseException {
+		ModelAndView model = new ModelAndView();
+		User user = new User();
+		user.setUserId(user_id);
+		user.setUserName(user_name);
+		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
+		user.setUserBirthday(df.parse(user_birthday));
+		user.setUserSalary(Double.valueOf(user_salary));
+		int sign = userService.updateUser(user);
+		if (sign == 1) {
+			List<User> users = userService.getAllUser();
+			model.addObject("users", users);
+			model.setViewName("jsp/user");
+		} else {
+			model.addObject("update_user_fail", "修改用户失败！");
+			model.setViewName("jsp/user");
+		}
+		return model;
+	}
+
+	@RequestMapping(value = "/deleteuser/{userId}", method = RequestMethod.GET)
+	// @ResponseBody
+	public ModelAndView deleteProduct(@PathVariable("userId") String userId) {
+		ModelAndView model = new ModelAndView();
+		int sign = userService.deleteUser(userId);
+		if (sign == 1) {
+			List<User> users = userService.getAllUser();
+			model.addObject("users", users);
+			model.setViewName("jsp/user");
+		} else {
+			model.addObject("delete_user_fail", "删除用户失败！");
+			model.setViewName("jsp/user");
 		}
 		return model;
 	}

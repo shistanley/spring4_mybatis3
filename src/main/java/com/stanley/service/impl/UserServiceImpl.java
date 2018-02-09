@@ -41,4 +41,14 @@ public class UserServiceImpl implements UserServiceI {
 	public List<User> getAllUser() {
 		return userMapper.getAllUser();
 	}
+
+	@Override
+	public int deleteUser(String userId) {
+		return userMapper.deleteByPrimaryKey(userId);
+	}
+
+	@Override
+	public int updateUser(User user) {
+		return userMapper.updateByPrimaryKey(user);
+	}
 }

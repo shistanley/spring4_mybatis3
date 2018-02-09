@@ -2,16 +2,16 @@ package com.stanley.model;
 
 public class Product {
 
-	private String productID;
+	private String productId;
 	private String productName;
 	private String productDesc;
 
-	public String getProductID() {
-		return productID;
+	public String getProductId() {
+		return productId;
 	}
 
-	public void setProductID(String productID) {
-		this.productID = productID;
+	public void setProductId(String productId) {
+		this.productId = productId;
 	}
 
 	public String getProductName() {

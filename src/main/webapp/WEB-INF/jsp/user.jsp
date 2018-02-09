@@ -1,17 +1,18 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
-<!DOCTYPE html>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt"%>
+<!DOCTYPE html">
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>产品列表</title>
+<title>用户列表</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- 引入 Bootstrap -->
 <link rel="stylesheet"
 	href="<c:url value='/Bootstrap/css/bootstrap.min.css' />">
 <script type="text/javascript">
-	function p_add() {
+	function u_add() {
 		var msg = "确定要添加吗？ \n\n请确认！";
 		if (confirm(msg) == true) {
 			return true;
@@ -20,7 +21,7 @@
 		}
 	}
 
-	function p_del() {
+	function u_del() {
 		var msg = "确定要删除吗？ \n\n请确认！";
 		if (confirm(msg) == true) {
 			return true;
@@ -40,6 +41,9 @@ table, th, td {
 	border-collapse: collapse;
 }
 </style>
+<script type="text/javascript"
+	src="<c:url value='/js/My97DatePicker/WdatePicker.js' />"></script>
+<script type="text/javascript" src="<c:url value='/js/money.js' />"></script>
 <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
 <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
 <!--[if lt IE 9]>
@@ -52,41 +56,45 @@ table, th, td {
 	<br>
 	<table>
 		<tr>
-			<th>产品ID</th>
-			<th>产品名</th>
-			<th>产品描述</th>
+			<th>用户ID</th>
+			<th>用户名</th>
+			<th>用户生日</th>
+			<th>用户余额</th>
 			<th>修改</th>
 			<th>删除</th>
 		</tr>
-		<c:forEach var="product" items="${products}">
+		<c:forEach var="user" items="${users}">
 			<tr>
-				<td>${product.productId}</td>
-				<td>${product.productName}</td>
-				<td>${product.productDesc}</td>
+				<td>${user.userId}</td>
+				<td>${user.userName}</td>
+				<td><fmt:formatDate value="${user.userBirthday}" type='date'
+						pattern="yyyy-MM-dd" /></td>
+				<td><fmt:formatNumber type="number" value="${user.userSalary}"
+						pattern="#.00" /></td>
 				<td><a
-					href="${pageContext.request.contextPath}/product/updateproduct/${product.productId}">修改</a></td>
+					href="${pageContext.request.contextPath}/user/updateuser/${user.userId}">修改</a></td>
 				<td><a
-					href="${pageContext.request.contextPath}/product/deleteproduct/${product.productId}"
-					onclick="return p_del()">删除</a></td>
+					href="${pageContext.request.contextPath}/user/deleteuser/${user.userId}"
+					onclick="return u_del()">删除</a></td>
 			</tr>
 		</c:forEach>
-		<c:if test="${not empty add_product_fail}">
+		<c:if test="${not empty add_user_fail}">
 			<tr>
-				<td colspan="5">${add_product_fail}</td>
+				<td colspan="6">${add_user_fail}</td>
 			</tr>
 		</c:if>
-		<c:if test="${not empty update_product_fail}">
+		<c:if test="${not empty update_user_fail}">
 			<tr>
-				<td colspan="5">${update_product_fail}</td>
+				<td colspan="6">${update_user_fail}</td>
 			</tr>
 		</c:if>
-		<c:if test="${not empty delete_product_fail}">
+		<c:if test="${not empty delete_user_fail}">
 			<tr>
-				<td colspan="5">${delete_product_fail}</td>
+				<td colspan="6">${delete_user_fail}</td>
 			</tr>
 		</c:if>
 		<tr>
-			<td colspan="5"><a
+			<td colspan="6"><a
 				href="${pageContext.request.contextPath}/index.jsp">返回</a></td>
 		</tr>
 	</table>
@@ -100,17 +108,25 @@ table, th, td {
 		<li><a href="#">&raquo;</a></li>
 	</ul>
 	<br />
-	<form action="${pageContext.request.contextPath}/product/addproduct"
-		onsubmit="return p_add()" method="post">
+	<!-- <div class="mui-input-row"> -->
+	<form action="${pageContext.request.contextPath}/user/adduser"
+		onsubmit="return u_add()" method="post">
 		<table>
 			<tr>
-				<td>产品名称</td>
-				<td><input type="text" name="product_name"
-					autofocus="autofocus" /></td>
+				<td>用户名</td>
+				<td><input type="text" name="user_name" autofocus="autofocus"
+					required="required" /></td>
 			</tr>
 			<tr>
-				<td>产品描述</td>
-				<td><textarea rows="6" cols="24" name="product_desc"></textarea></td>
+				<td>用户生日</td>
+				<td><input class="Wdate" type="text" name="user_birthday"
+					onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})"
+					required="required" /></td>
+			</tr>
+			<tr>
+				<td>用户余额</td>
+				<td><input type="text" name="user_salary" value="0.00"
+					required="required" /></td>
 			</tr>
 			<tr>
 				<td colspan="2"><input type="submit" value="添加" />&nbsp;<input
@@ -118,6 +134,7 @@ table, th, td {
 			</tr>
 		</table>
 	</form>
+	<!-- </div> -->
 	<jsp:include page="/WEB-INF/jsp/footer.jsp" />
 	<!-- jQuery (Bootstrap 的 JavaScript 插件需要引入 jQuery) -->
 	<script src="<c:url value='/Bootstrap/js/jquery.min.js' />"></script>

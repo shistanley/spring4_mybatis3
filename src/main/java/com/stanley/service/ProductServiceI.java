@@ -8,7 +8,11 @@ public interface ProductServiceI {
 
 	int addProduct(Product product);
 	
-	Product getProductById(String productID);
+	int deleteProduct(String productId);
+	
+	int updateProduct(Product product);
+	
+	Product getProductById(String productId);
 	
 	List<Product> getProductByProductName(String productName);
 	
