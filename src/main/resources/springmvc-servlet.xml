@@ -16,7 +16,7 @@
 	<mvc:resources location="/WEB-INF/css/" mapping="/css/**" />
 	<mvc:resources location="/WEB-INF/js/" mapping="/js/**" />
 	<mvc:resources location="/WEB-INF/image/" mapping="/image/**" />
-	<mvc:resources location="/Bootstrap/" mapping="/Bootstrap/**" />	
+	<mvc:resources location="/Bootstrap/" mapping="/Bootstrap/**" />
 
 	<!-- don't handle the static resource -->
 	<mvc:default-servlet-handler />
@@ -79,7 +79,7 @@
 	<bean id="messageSource"
 		class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
 		<property name="basename" value="classpath:messages" />
-		<!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称  -->
+		<!-- 如果在国际化资源文件中找不到对应代码的信息，就用这个代码作为名称 -->
 		<property name="useCodeAsDefaultMessage" value="true" />
 	</bean>
 
@@ -88,6 +88,11 @@
 			class="org.springframework.web.servlet.i18n.LocaleChangeInterceptor">
 			<property name="paramName" value="lang" />
 		</bean>
+		<mvc:interceptor>
+			<mvc:mapping path="/user/**" />
+			<mvc:mapping path="/product/**" />
+			<bean class="com.stanley.common.TokenInterceptor" />
+		</mvc:interceptor>
 	</mvc:interceptors>
 
 	<!-- 处理器 -->

@@ -1,46 +1,50 @@
 package com.stanley.web.controller;
 
-import java.util.List;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-//import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.stanley.model.Product;
 import com.stanley.service.ProductServiceI;
+import com.stanley.support.Token;
 import com.stanley.support.Util;
 
 @Controller
 @RequestMapping("/product")
 public class ProductAction {
 
-	// private static final String SUCCESS = "success";
+	private final static Logger logger = LoggerFactory.getLogger(ProductAction.class);
+	@SuppressWarnings("unused")
+	private static final String MESSAGE = "product_message";
+	private static final String SUCCESS = "product_success";
+	private static final String FAIL = "product_fail";
+
 	@Autowired
 	private ProductServiceI productService;
 
 	@RequestMapping(value = "/addproduct", method = RequestMethod.POST)
-	public ModelAndView addProduct(@RequestParam("product_name") String product_name,
-			@RequestParam("product_desc") String product_desc) {
+	@Token(remove = true)
+	public String addProduct(@RequestParam("product_name") String product_name,
+			@RequestParam("product_desc") String product_desc, RedirectAttributes attr) {
+		logger.info(String.format("添加产品：", product_name));
 		Product product = new Product();
 		product.setProductId(Util.getInstance().getRandomID());
 		product.setProductName(product_name);
 		product.setProductDesc(product_desc);
-		ModelAndView model = new ModelAndView();
 		int sign = productService.addProduct(product);
 		if (sign == 1) {
-			List<Product> products = productService.getAllProduct();
-			model.addObject("products", products);
-			model.setViewName("jsp/product");
+			attr.addFlashAttribute(SUCCESS, "添加产品 " + product_name + " 成功！");
 		} else {
-			model.addObject("add_product_fail", "添加产品失败！");
-			model.setViewName("jsp/product");
+			attr.addFlashAttribute(FAIL, "添加产品 " + product_name + " 失败！");
 		}
-		return model;
+		return "redirect:/product";
 	}
 
 	@RequestMapping(value = "/updateproduct/{productId}", method = RequestMethod.GET)
@@ -53,39 +57,40 @@ public class ProductAction {
 	}
 
 	@RequestMapping(value = "/updateproductsubmit", method = RequestMethod.POST)
-	public ModelAndView updateProductSubmit(
-			@RequestParam(value = "product_id_hidden", required = true) String product_id,
-			@RequestParam("product_name") String product_name, @RequestParam("product_desc") String product_desc) {
-		ModelAndView model = new ModelAndView();
+	@Token(remove = true)
+	public String updateProductSubmit(@RequestParam(value = "product_id_hidden", required = true) String product_id,
+			@RequestParam("product_name") String product_name, @RequestParam("product_desc") String product_desc,
+			RedirectAttributes attr) {
+		logger.info(String.format("更新产品：", product_name));
 		Product product = new Product();
 		product.setProductId(product_id);
 		product.setProductName(product_name);
 		product.setProductDesc(product_desc);
 		int sign = productService.updateProduct(product);
 		if (sign == 1) {
-			List<Product> products = productService.getAllProduct();
-			model.addObject("products", products);
-			model.setViewName("jsp/product");
+			attr.addFlashAttribute(SUCCESS, "更新产品 " + product_name + " 成功！");
 		} else {
-			model.addObject("update_product_fail", "更新产品失败！");
-			model.setViewName("jsp/product");
+			attr.addFlashAttribute(FAIL, "更新产品 " + product_name + " 失败！");
 		}
-		return model;
+		return "redirect:/product";
 	}
 
 	@RequestMapping(value = "/deleteproduct/{productId}", method = RequestMethod.GET)
 	// @ResponseBody
-	public ModelAndView deleteProduct(@PathVariable("productId") String productId) {
-		ModelAndView model = new ModelAndView();
+	public String deleteProduct(@PathVariable("productId") String productId, RedirectAttributes attr) {
+		String product_name = getProductName(productId);
+		logger.info(String.format("删除产品：", product_name));
 		int sign = productService.deleteProduct(productId);
 		if (sign == 1) {
-			List<Product> products = productService.getAllProduct();
-			model.addObject("products", products);
-			model.setViewName("jsp/product");
+			attr.addFlashAttribute(SUCCESS, "删除产品 " + product_name + " 成功！");
 		} else {
-			model.addObject("delete_product_fail", "删除产品失败！");
-			model.setViewName("jsp/product");
+			attr.addFlashAttribute(FAIL, "删除产品 " + product_name + " 失败！");
 		}
-		return model;
+		return "redirect:/product";
+	}
+
+	private String getProductName(String productId) {
+		String productName = productService.getProductById(productId).getProductName();
+		return productName;
 	}
 }

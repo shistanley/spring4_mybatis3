@@ -42,12 +42,33 @@ table, th, td {
 </style>
 <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
 <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
-<!--[if lt IE 9]>
-         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-      <![endif]-->
+<!--[if lt IE 9]-->
+<script src="<c:url value='/js/html5shiv.js' />"></script>
+<script src="<c:url value='/js/respond.min.js' />"></script>
+<!--[endif]-->
 </head>
 <body>
+	<c:if test="${not empty product_message}">
+		<div class="alert alert-info alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			${product_message}
+		</div>
+	</c:if>
+	<c:if test="${not empty product_success}">
+		<div class="alert alert-success alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			${product_success}
+		</div>
+	</c:if>
+	<c:if test="${not empty product_fail}">
+		<div class="alert alert-danger alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			${product_fail}
+		</div>
+	</c:if>
 	<jsp:include page="/WEB-INF/jsp/header.jsp" />
 	<br>
 	<table>
@@ -70,20 +91,20 @@ table, th, td {
 					onclick="return p_del()">删除</a></td>
 			</tr>
 		</c:forEach>
-		<c:if test="${not empty add_product_fail}">
-			<tr>
-				<td colspan="5">${add_product_fail}</td>
-			</tr>
+		<c:if test="${not empty product_message}">
+			<script>
+				alert("${product_message}");
+			</script>
 		</c:if>
-		<c:if test="${not empty update_product_fail}">
-			<tr>
-				<td colspan="5">${update_product_fail}</td>
-			</tr>
+		<c:if test="${not empty product_success}">
+			<script>
+				alert("${product_success}");
+			</script>
 		</c:if>
-		<c:if test="${not empty delete_product_fail}">
-			<tr>
-				<td colspan="5">${delete_product_fail}</td>
-			</tr>
+		<c:if test="${not empty product_fail}">
+			<script>
+				alert("${product_fail}");
+			</script>
 		</c:if>
 		<tr>
 			<td colspan="5"><a
@@ -102,10 +123,11 @@ table, th, td {
 	<br />
 	<form action="${pageContext.request.contextPath}/product/addproduct"
 		onsubmit="return p_add()" method="post">
+		<input type="hidden" name="token" value="${token}" />
 		<table>
 			<tr>
 				<td>产品名称</td>
-				<td><input type="text" name="product_name"
+				<td><input type="text" name="product_name" required="required"
 					autofocus="autofocus" /></td>
 			</tr>
 			<tr>

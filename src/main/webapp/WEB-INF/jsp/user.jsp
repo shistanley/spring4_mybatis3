@@ -46,12 +46,33 @@ table, th, td {
 <script type="text/javascript" src="<c:url value='/js/money.js' />"></script>
 <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
 <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
-<!--[if lt IE 9]>
-         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-         <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
-      <![endif]-->
+<!--[if lt IE 9]-->
+<script src="<c:url value='/js/html5shiv.js' />"></script>
+<script src="<c:url value='/js/respond.min.js' />"></script>
+<!--[endif]-->
 </head>
 <body>
+	<c:if test="${not empty user_message}">
+		<div class="alert alert-info alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			${user_message}
+		</div>
+	</c:if>
+	<c:if test="${not empty user_success}">
+		<div class="alert alert-success alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			${user_success}
+		</div>
+	</c:if>
+	<c:if test="${not empty user_fail}">
+		<div class="alert alert-danger alert-dismissable">
+			<button type="button" class="close" data-dismiss="alert"
+				aria-hidden="true">&times;</button>
+			${user_fail}
+		</div>
+	</c:if>
 	<jsp:include page="/WEB-INF/jsp/header.jsp" />
 	<br>
 	<table>
@@ -78,20 +99,20 @@ table, th, td {
 					onclick="return u_del()">删除</a></td>
 			</tr>
 		</c:forEach>
-		<c:if test="${not empty add_user_fail}">
-			<tr>
-				<td colspan="6">${add_user_fail}</td>
-			</tr>
+		<c:if test="${not empty user_message}">
+			<script>
+				alert("${user_message}");
+			</script>
 		</c:if>
-		<c:if test="${not empty update_user_fail}">
-			<tr>
-				<td colspan="6">${update_user_fail}</td>
-			</tr>
+		<c:if test="${not empty user_success}">
+			<script>
+				alert("${user_success}");
+			</script>
 		</c:if>
-		<c:if test="${not empty delete_user_fail}">
-			<tr>
-				<td colspan="6">${delete_user_fail}</td>
-			</tr>
+		<c:if test="${not empty user_fail}">
+			<script>
+				alert("${user_fail}");
+			</script>
 		</c:if>
 		<tr>
 			<td colspan="6"><a
@@ -111,11 +132,12 @@ table, th, td {
 	<!-- <div class="mui-input-row"> -->
 	<form action="${pageContext.request.contextPath}/user/adduser"
 		onsubmit="return u_add()" method="post">
+		<input type="hidden" name="token" value="${token}" />
 		<table>
 			<tr>
 				<td>用户名</td>
-				<td><input type="text" name="user_name" autofocus="autofocus"
-					required="required" /></td>
+				<td><input type="text" name="user_name" required="required"
+					autofocus="autofocus" required="required" /></td>
 			</tr>
 			<tr>
 				<td>用户生日</td>

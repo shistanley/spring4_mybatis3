@@ -12,6 +12,7 @@ import com.stanley.model.Product;
 import com.stanley.model.User;
 import com.stanley.service.ProductServiceI;
 import com.stanley.service.UserServiceI;
+import com.stanley.support.Token;
 
 @Controller
 public class PageController {
@@ -22,14 +23,16 @@ public class PageController {
 	private ProductServiceI productService;
 
 	@RequestMapping(value = "/user", method = RequestMethod.GET)
+	@Token(save = true)
 	public ModelAndView gotoUser_Page(ModelAndView model) {
 		List<User> users = userService.getAllUser();
 		model.addObject("users", users);
 		model.setViewName("jsp/user");
 		return model;
 	}
-	
+
 	@RequestMapping(value = "/product", method = RequestMethod.GET)
+	@Token(save = true)
 	public ModelAndView gotoProduct_Page(ModelAndView model) {
 		List<Product> products = productService.getAllProduct();
 		model.addObject("products", products);

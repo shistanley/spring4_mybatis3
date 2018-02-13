@@ -27,9 +27,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.stanley.model.User;
 import com.stanley.service.UserServiceI;
+import com.stanley.support.Token;
 import com.stanley.support.Util;
 
 @Controller
@@ -37,21 +39,26 @@ import com.stanley.support.Util;
 public class UserAction {
 
 	private final static Logger logger = LoggerFactory.getLogger(UserAction.class);
+	@SuppressWarnings("unused")
+	private static final String MESSAGE = "user_message";
+	private static final String SUCCESS = "user_success";
+	private static final String FAIL = "user_fail";
+
 	// 注入userService
 	@Autowired
 	private UserServiceI userService;
 
-	@RequestMapping("/getallusers")
-	public ModelAndView getAllUser() {
-		List<User> users = userService.getAllUser();
-		ModelAndView model = new ModelAndView();
-		if (users.isEmpty()) {
-			model.addObject("messages", "目前无用户，请先添加用户！");
-		}
-		model.addObject("lstUsers", users);
-		model.setViewName("jsp/allusers");
-		return model;
-	}
+	// @RequestMapping("/getallusers")
+	// public ModelAndView getAllUser() {
+	// List<User> users = userService.getAllUser();
+	// ModelAndView model = new ModelAndView();
+	// if (users.isEmpty()) {
+	// model.addObject("messages", "目前无用户，请先添加用户！");
+	// }
+	// model.addObject("lstUsers", users);
+	// model.setViewName("jsp/allusers");
+	// return model;
+	// }
 
 	@RequestMapping("/getusername")
 	public ModelAndView getUserByUsername(HttpServletRequest request, HttpServletResponse response) {
@@ -105,29 +112,28 @@ public class UserAction {
 	}
 
 	@RequestMapping(value = "/adduser", method = RequestMethod.POST)
-	public ModelAndView addUser(@RequestParam("user_name") String user_name,
-			@RequestParam("user_birthday") String user_birthday, @RequestParam("user_salary") String user_salary)
-			throws ParseException {
+	@Token(remove = true)
+	public String addUser(@RequestParam("user_name") String user_name,
+			@RequestParam("user_birthday") String user_birthday, @RequestParam("user_salary") String user_salary,
+			RedirectAttributes attr) throws ParseException {
+		logger.info(String.format("新增用户：", user_name));
 		User user = new User();
 		user.setUserId(Util.getInstance().getRandomID());
 		user.setUserName(user_name);
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		user.setUserBirthday(df.parse(user_birthday));
 		user.setUserSalary(Double.valueOf(user_salary));
-		ModelAndView model = new ModelAndView();
 		int sign = userService.addUser(user);
 		if (sign == 1) {
-			List<User> users = userService.getAllUser();
-			model.addObject("users", users);
-			model.setViewName("jsp/user");
+			attr.addFlashAttribute(SUCCESS, "新增用户 " + user_name + " 成功！");
 		} else {
-			model.addObject("add_user_fail", "新增用户失败！");
-			model.setViewName("jsp/user");
+			attr.addFlashAttribute(FAIL, "新增用户 " + user_name + " 失败！");
 		}
-		return model;
+		return "redirect:/user";
 	}
 
 	@RequestMapping(value = "/updateuser/{userId}", method = RequestMethod.GET)
+	@Token(save = true)
 	public ModelAndView updateUser(@PathVariable("userId") String userId) {
 		ModelAndView model = new ModelAndView();
 		User user = userService.getUserById(userId);
@@ -137,10 +143,11 @@ public class UserAction {
 	}
 
 	@RequestMapping(value = "/updateusersubmit", method = RequestMethod.POST)
-	public ModelAndView updateProductSubmit(@RequestParam(value = "user_id_hidden", required = true) String user_id,
+	@Token(remove = true)
+	public String updateProductSubmit(@RequestParam(value = "user_id_hidden", required = true) String user_id,
 			@RequestParam("user_name") String user_name, @RequestParam("user_birthday") String user_birthday,
-			@RequestParam("user_salary") String user_salary) throws ParseException {
-		ModelAndView model = new ModelAndView();
+			@RequestParam("user_salary") String user_salary, RedirectAttributes attr) throws ParseException {
+		logger.info(String.format("修改用户：", user_name));
 		User user = new User();
 		user.setUserId(user_id);
 		user.setUserName(user_name);
@@ -149,29 +156,28 @@ public class UserAction {
 		user.setUserSalary(Double.valueOf(user_salary));
 		int sign = userService.updateUser(user);
 		if (sign == 1) {
-			List<User> users = userService.getAllUser();
-			model.addObject("users", users);
-			model.setViewName("jsp/user");
+			attr.addFlashAttribute(SUCCESS, "修改用户 " + user_name + " 成功！");
 		} else {
-			model.addObject("update_user_fail", "修改用户失败！");
-			model.setViewName("jsp/user");
+			attr.addFlashAttribute(FAIL, "修改用户 " + user_name + " 失败！");
 		}
-		return model;
+		return "redirect:/user";
 	}
 
 	@RequestMapping(value = "/deleteuser/{userId}", method = RequestMethod.GET)
-	// @ResponseBody
-	public ModelAndView deleteProduct(@PathVariable("userId") String userId) {
-		ModelAndView model = new ModelAndView();
+	public String deleteProduct(@PathVariable("userId") String userId, RedirectAttributes attr) {
+		String user_name = getUserName(userId);
+		logger.info(String.format("删除用户：", user_name));
 		int sign = userService.deleteUser(userId);
 		if (sign == 1) {
-			List<User> users = userService.getAllUser();
-			model.addObject("users", users);
-			model.setViewName("jsp/user");
+			attr.addFlashAttribute(SUCCESS, "删除用户 " + user_name + " 成功！");
 		} else {
-			model.addObject("delete_user_fail", "删除用户失败！");
-			model.setViewName("jsp/user");
+			attr.addFlashAttribute(FAIL, "删除用户 " + user_name + " 失败！");
 		}
-		return model;
+		return "redirect:/user";
+	}
+
+	private String getUserName(String userId) {
+		String userName = userService.getUserById(userId).getUserName();
+		return userName;
 	}
 }
