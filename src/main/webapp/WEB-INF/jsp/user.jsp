@@ -91,7 +91,7 @@ table, th, td {
 				<td><fmt:formatDate value="${user.userBirthday}" type='date'
 						pattern="yyyy-MM-dd" /></td>
 				<td><fmt:formatNumber type="number" value="${user.userSalary}"
-						pattern="#.00" /></td>
+						pattern="0.00" /></td>
 				<td><a
 					href="${pageContext.request.contextPath}/user/updateuser/${user.userId}">修改</a></td>
 				<td><a

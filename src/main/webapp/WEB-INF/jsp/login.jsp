@@ -7,7 +7,7 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<title>Spring4集成MyBatis3 - 注册</title>
+<title>Spring4集成MyBatis3 - 登录</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <!-- 引入 Bootstrap -->
 <link rel="stylesheet" href="Bootstrap/css/bootstrap.min.css">
@@ -27,9 +27,6 @@ table, th, td {
 	width: 100%; /* 给个宽度 顶到浏览器的两边就看不出居中效果了 */
 }
 </style>
-<script type="text/javascript"
-	src="<c:url value='/js/My97DatePicker/WdatePicker.js' />"></script>
-<script type="text/javascript" src="<c:url value='/js/money.js' />"></script>
 <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
 <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
 <!--[if lt IE 9]-->
@@ -40,7 +37,7 @@ table, th, td {
 <body>
 	<jsp:include page="/WEB-INF/jsp/header.jsp" />
 	<br>
-	<form action="${pageContext.request.contextPath}/user/registuser"
+	<form action="${pageContext.request.contextPath}/user/loginuser"
 		method="post">
 		<table>
 			<tr>
@@ -53,16 +50,7 @@ table, th, td {
 				<td><input type="password" name="user_pwd" /></td>
 			</tr>
 			<tr>
-				<td>确认密码</td>
-				<td><input type="password" name="user_pwd_confirm" /></td>
-			</tr>
-			<tr>
-				<td>用户生日</td>
-				<td><input class="Wdate" type="text" name="user_birthday"
-					onClick="WdatePicker({el:this,dateFmt:'yyyy-MM-dd'})" /></td>
-			</tr>
-			<tr>
-				<td colspan=2><input type="submit" value="注册" />&nbsp;<input
+				<td colspan=2><input type="submit" value="登录" />&nbsp;<input
 					type="reset" value="重置" />&nbsp;<a
 					href="${pageContext.request.contextPath}/index.jsp">返回</a></td>
 			</tr>

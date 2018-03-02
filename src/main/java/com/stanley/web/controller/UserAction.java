@@ -3,14 +3,14 @@ package com.stanley.web.controller;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.List;
-import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
+//import javax.validation.Valid;
+//import javax.validation.Validation;
+//import javax.validation.Validator;
+//import javax.validation.ValidatorFactory;
+import javax.servlet.http.HttpSession;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -19,12 +19,14 @@ import org.slf4j.LoggerFactory;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.ui.ModelMap;
+//import org.springframework.validation.BindingResult;
+//import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.SessionAttributes;
 //import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -36,6 +38,7 @@ import com.stanley.support.Util;
 
 @Controller
 @RequestMapping("/user")
+@SessionAttributes("userInfo")
 public class UserAction {
 
 	private final static Logger logger = LoggerFactory.getLogger(UserAction.class);
@@ -74,41 +77,50 @@ public class UserAction {
 		return model;
 	}
 
-	@RequestMapping("/regist")
-	public ModelAndView regist() {
-		ModelAndView model = new ModelAndView("jsp/regist");
-		return model;
+	@RequestMapping(value = "/loginuser", method = RequestMethod.POST)
+	public String loginUser(@RequestParam("user_name") String user_name, @RequestParam("user_pwd") String user_pwd,
+			ModelMap model) {
+		logger.info(String.format("登录：", user_name));
+		User user = userService.checkLogin(user_name, user_pwd);
+		if (user != null) {
+			model.addAttribute("userInfo", user);
+		}
+		return "redirect:/user";
 	}
 
-	@RequestMapping("/registuser")
-	public ModelAndView registUser(@ModelAttribute("user") @Valid User u, BindingResult br, String user_name,
-			String user_birthday, String user_salary) throws ParseException {
-		ModelAndView model = new ModelAndView();
-		if (br.hasErrors()) {
-			// 验证未通过则
-			// model.setViewName("validate1");
-			return model;
-		}
+	@RequestMapping(value = "/logout", method = RequestMethod.GET)
+	public String logout(HttpSession httpSession) {
+		logger.info(String.format("注销用户"));
+		httpSession.invalidate();
+		return "redirect:/index";
+	}
+
+	@RequestMapping(value = "/registuser", method = RequestMethod.POST)
+	public String registUser(@RequestParam("user_name") String user_name, @RequestParam("user_pwd") String user_pwd,
+			@RequestParam("user_birthday") String user_birthday, RedirectAttributes attr) throws ParseException {
+		logger.info(String.format("注册用户：", user_name));
+
 		User user = new User();
-		user.setUserId(UUID.randomUUID().toString().replaceAll("-", ""));
+		user.setUserId(Util.getInstance().getRandomID());
 		user.setUserName(user_name);
+		user.setUserPwd(user_pwd);
 		SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd");
 		user.setUserBirthday(df.parse(user_birthday));
-		user.setUserSalary(Double.valueOf(user_salary));
+		user.setUserSalary(0.00);
 
-		ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
-		Validator validator = factory.getValidator();
-		validator.validate(user);
+		// ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
+		// Validator validator = factory.getValidator();
+		// validator.validate(user);
 		int sign = userService.addUser(user);
-
+		// ModelAndView model = new ModelAndView();
 		if (sign == 1) {
-			model.addObject("adduser", user);
-			model.setViewName("jsp/success");
+			attr.addFlashAttribute(SUCCESS, "注册成功！");
+			// model.setViewName("user");
 		} else {
-			model.addObject("addfail", "添加用户失败！");
-			model.setViewName("jsp/fail");
+			attr.addFlashAttribute(FAIL, "注册失败！");
+			// model.setViewName("user");
 		}
-		return model;
+		return "redirect:/user";
 	}
 
 	@RequestMapping(value = "/adduser", method = RequestMethod.POST)

@@ -108,7 +108,7 @@ table, th, td {
 		</c:if>
 		<tr>
 			<td colspan="5"><a
-				href="${pageContext.request.contextPath}/index.jsp">返回</a></td>
+				href="index">返回</a></td>
 		</tr>
 	</table>
 	<ul class="pagination">

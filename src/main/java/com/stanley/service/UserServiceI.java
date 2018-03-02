@@ -5,6 +5,14 @@ import java.util.List;
 import com.stanley.model.User;
 
 public interface UserServiceI {
+	
+	/**
+	 * 检查用户登录状态
+	 * @param username
+	 * @param password
+	 * @return User
+	 */
+	User checkLogin(String username, String password);
 
 	/**
 	 * 添加用户

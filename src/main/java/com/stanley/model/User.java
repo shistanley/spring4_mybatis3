@@ -10,8 +10,10 @@ public class User {
 
     @NotEmpty
     private String userName;
+    
+    private String userPwd;
 
-    private Date userBirthday;
+	private Date userBirthday;
 
     private Double userSalary;
 
@@ -30,6 +32,14 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName == null ? null : userName.trim();
     }
+    
+    public String getUserPwd() {
+		return userPwd;
+	}
+
+	public void setUserPwd(String userPwd) {
+		this.userPwd = userPwd;
+	}
 
     public Date getUserBirthday() {
         return userBirthday;

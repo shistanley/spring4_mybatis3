@@ -9,7 +9,6 @@
 <!-- 引入 Bootstrap -->
 <link rel="stylesheet" href="Bootstrap/css/bootstrap.min.css">
 <style type="text/css">
-
 </style>
 <!-- HTML5 Shiv 和 Respond.js 用于让 IE8 支持 HTML5元素和媒体查询 -->
 <!-- 注意： 如果通过 file://  引入 Respond.js 文件，则该文件无法起效果 -->
@@ -49,10 +48,14 @@
 					</button>
 				</form>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="#"><span class="glyphicon glyphicon-user"></span>
-							注册</a></li>
-					<li><a href="#"><span class="glyphicon glyphicon-log-in"></span>
-							登录</a></li>
+					<li><a href="regist"><span
+							class="glyphicon glyphicon-user"></span> 注册</a></li>
+					<li><a href="login"><span
+							class="glyphicon glyphicon-log-in"></span> 登录</a></li>
+					<li><a href="UserInfo"><span
+							class="glyphicon glyphicon-user"></span> 个人信息</a></li>
+					<li><a href="logout"><span
+							class="glyphicon glyphicon-log-out"></span> 注销</a></li>
 				</ul>
 			</div>
 			<!-- /.nav-collapse -->

@@ -31,6 +31,23 @@ public class PageController {
 		return model;
 	}
 
+	@RequestMapping(value = "/regist", method = RequestMethod.GET)
+	public ModelAndView regist() {
+		ModelAndView model = new ModelAndView("jsp/regist");
+		return model;
+	}
+	
+	@RequestMapping(value = "/index", method = RequestMethod.GET)
+	public String index() {
+		return "redirect:/index.jsp";
+	}
+
+	@RequestMapping(value = "/login", method = RequestMethod.GET)
+	public ModelAndView login() {
+		ModelAndView model = new ModelAndView("jsp/login");
+		return model;
+	}
+
 	@RequestMapping(value = "/product", method = RequestMethod.GET)
 	@Token(save = true)
 	public ModelAndView gotoProduct_Page(ModelAndView model) {

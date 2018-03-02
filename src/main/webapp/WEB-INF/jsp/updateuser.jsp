@@ -67,11 +67,11 @@ table, th, td {
 					required="required" /></td>
 				<td><input type="text" name="user_salary"
 					value="<fmt:formatNumber type='number' value='${user.userSalary}'
-						pattern="#.00" />"
+						pattern="0.00" />"
 					required="required" /></td>
 			</tr>
 			<tr>
-				<td colspan="3"><input type="submit" value="确认" />&nbsp; <a
+				<td colspan="4"><input type="submit" value="确认" />&nbsp; <a
 					href="${pageContext.request.contextPath}/user">返回用户列表</a></td>
 			</tr>
 		</table>

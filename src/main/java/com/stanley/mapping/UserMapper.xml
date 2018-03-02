@@ -4,6 +4,7 @@
 	<resultMap id="BaseResultMap" type="com.stanley.model.User">
 		<id column="user_id" property="userId" jdbcType="CHAR" />
 		<result column="user_name" property="userName" jdbcType="VARCHAR" />
+		<result column="user_pwd" property="userPwd" jdbcType="VARCHAR" />
 		<result column="user_birthday" property="userBirthday"
 			jdbcType="DATE" />
 		<result column="user_salary" property="userSalary" jdbcType="DOUBLE" />
@@ -24,10 +25,12 @@
 	</delete>
 	<insert id="insert" parameterType="com.stanley.model.User">
 		insert into t_user (user_id,
-		user_name, user_birthday,
+		user_name, user_pwd, user_birthday,
 		user_salary)
-		values (#{userId,jdbcType=CHAR},
+		values
+		(#{userId,jdbcType=CHAR},
 		#{userName,jdbcType=VARCHAR},
+		#{userPwd,jdbcType=VARCHAR},
 		#{userBirthday,jdbcType=DATE},
 		#{userSalary,jdbcType=DOUBLE})
 	</insert>
@@ -39,6 +42,9 @@
 			</if>
 			<if test="userName != null">
 				user_name,
+			</if>
+			<if test="userPwd != null">
+				user_pwd,
 			</if>
 			<if test="userBirthday != null">
 				user_birthday,
@@ -54,6 +60,9 @@
 			<if test="userName != null">
 				#{userName,jdbcType=VARCHAR},
 			</if>
+			<if test="userPwd != null">
+				#{userPwd,jdbcType=VARCHAR},
+			</if>
 			<if test="userBirthday != null">
 				#{userBirthday,jdbcType=DATE},
 			</if>
@@ -68,6 +77,9 @@
 			<if test="userName != null">
 				user_name = #{userName,jdbcType=VARCHAR},
 			</if>
+			<if test="userPwd != null">
+				user_pwd = #{userPwd,jdbcType=VARCHAR},
+			</if>
 			<if test="userBirthday != null">
 				user_birthday = #{userBirthday,jdbcType=DATE},
 			</if>
@@ -81,6 +93,8 @@
 		update t_user
 		set
 		user_name = #{userName,jdbcType=VARCHAR},
+		user_pwd =
+		#{userPwd,jdbcType=VARCHAR},
 		user_birthday =
 		#{userBirthday,jdbcType=DATE},
 		user_salary =
@@ -90,8 +104,17 @@
 
 	<select id="findUserByUsername" parameterType="java.lang.String"
 		resultMap="BaseResultMap">
-		select user_id, user_name, user_birthday, user_salary from t_user where
+		select user_id, user_name, user_birthday, user_salary from
+		t_user where
 		user_name = #{userName,jdbcType=VARCHAR}
+	</select>
+
+	<select id="checkUserByUsernameAndPassword" parameterType="java.lang.String"
+		resultMap="BaseResultMap">
+		select user_id, user_name, user_pwd, user_birthday,
+		user_salary from t_user where
+		user_name = #{userName,jdbcType=VARCHAR}
+		and user_pwd = #{userPwd,jdbcType=VARCHAR}
 	</select>
 
 	<!-- ==============以下内容是根据自身业务扩展的内容======================= -->

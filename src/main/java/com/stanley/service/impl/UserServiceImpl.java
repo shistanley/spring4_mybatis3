@@ -24,7 +24,8 @@ public class UserServiceImpl implements UserServiceI {
 
 	@Override
 	public int addUser(User user) {
-		return userMapper.insert(user);
+		// return userMapper.insert(user);
+		return userMapper.insertSelective(user);
 	}
 
 	@Override
@@ -49,6 +50,16 @@ public class UserServiceImpl implements UserServiceI {
 
 	@Override
 	public int updateUser(User user) {
-		return userMapper.updateByPrimaryKey(user);
+		// return userMapper.updateByPrimaryKey(user);
+		return userMapper.updateByPrimaryKeySelective(user);
+	}
+
+	@Override
+	public User checkLogin(String username, String password) {
+		User user = userMapper.checkUserByUsernameAndPassword(username, password).get(0);
+		if (user != null) {
+			return user;
+		}
+		return null;
 	}
 }

@@ -18,6 +18,8 @@ public interface UserMapper {
 	int updateByPrimaryKey(User record);
 
 	List<User> findUserByUsername(String username);
+	
+	List<User> checkUserByUsernameAndPassword(String username, String password);
 
 	/**
 	 * 获取所有用户信息
