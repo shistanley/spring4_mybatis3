@@ -2,6 +2,8 @@ package com.stanley.dao;
 
 import java.util.List;
 
+import org.apache.ibatis.annotations.Param;
+
 import com.stanley.model.User;
 
 public interface UserMapper {
@@ -17,9 +19,9 @@ public interface UserMapper {
 
 	int updateByPrimaryKey(User record);
 
-	List<User> findUserByUsername(String username);
-	
-	List<User> checkUserByUsernameAndPassword(String username, String password);
+	List<User> findUserByUsername(String userName);
+
+	List<User> checkUserByUsernameAndPassword(@Param("userName") String userName, @Param("userPwd") String userPwd);
 
 	/**
 	 * 获取所有用户信息

@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+//import org.springframework.web.bind.annotation.ModelAttribute;
 //import org.springframework.validation.BindingResult;
 //import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import com.stanley.constants.GlobalConstants;
 import com.stanley.model.User;
 import com.stanley.service.UserServiceI;
 import com.stanley.support.Token;
@@ -38,7 +40,7 @@ import com.stanley.support.Util;
 
 @Controller
 @RequestMapping("/user")
-@SessionAttributes("userInfo")
+@SessionAttributes({ GlobalConstants.USER_SESSION })
 public class UserAction {
 
 	private final static Logger logger = LoggerFactory.getLogger(UserAction.class);
@@ -83,16 +85,18 @@ public class UserAction {
 		logger.info(String.format("登录：", user_name));
 		User user = userService.checkLogin(user_name, user_pwd);
 		if (user != null) {
-			model.addAttribute("userInfo", user);
+			model.addAttribute(GlobalConstants.USER_SESSION, user);
 		}
-		return "redirect:/user";
+		return "redirect:/index";
 	}
 
 	@RequestMapping(value = "/logout", method = RequestMethod.GET)
-	public String logout(HttpSession httpSession) {
+	public String logout(HttpSession httpSession, ModelMap model) {
 		logger.info(String.format("注销用户"));
+		httpSession.removeAttribute(GlobalConstants.USER_SESSION);
+		model.remove(GlobalConstants.USER_SESSION);
 		httpSession.invalidate();
-		return "redirect:/index";
+		return "redirect:/login";
 	}
 
 	@RequestMapping(value = "/registuser", method = RequestMethod.POST)

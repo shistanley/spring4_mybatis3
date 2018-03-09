@@ -1,5 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
 <!DOCTYPE html>
 <html>
 <head>
@@ -48,14 +49,20 @@
 					</button>
 				</form>
 				<ul class="nav navbar-nav navbar-right">
-					<li><a href="regist"><span
-							class="glyphicon glyphicon-user"></span> 注册</a></li>
-					<li><a href="login"><span
-							class="glyphicon glyphicon-log-in"></span> 登录</a></li>
-					<li><a href="UserInfo"><span
-							class="glyphicon glyphicon-user"></span> 个人信息</a></li>
-					<li><a href="logout"><span
-							class="glyphicon glyphicon-log-out"></span> 注销</a></li>
+					<c:choose>
+						<c:when test="${not empty sessionScope.get('user_session')}">
+							<li><a href="UserInfo"><span
+									class="glyphicon glyphicon-user"></span> 个人信息</a>${sessionScope.user_session.userName} }</li>
+							<li><a href="user/logout"><span
+									class="glyphicon glyphicon-log-out"></span> 注销</a></li>							
+						</c:when>
+						<c:otherwise>
+							<li><a href="regist"><span
+									class="glyphicon glyphicon-user"></span> 注册</a></li>
+							<li><a href="login"><span
+									class="glyphicon glyphicon-log-in"></span> 登录</a></li>							
+						</c:otherwise>
+					</c:choose>
 				</ul>
 			</div>
 			<!-- /.nav-collapse -->
